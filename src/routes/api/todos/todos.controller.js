@@ -30,6 +30,20 @@ const controller = {
     item.id = db.length;
     db.push(item);
   },
+  update: body => {
+    if (body.id)
+      throw new Error("you cannot specify id");
+    if (!body.content)
+      throw new Error("there must be a content");
+    if (!body.due)
+      throw new Error("there must be a due date");
+    for (const item of db) {
+      if (item.id === +id) {
+        item.content = body.content;
+        item.due = body.due;
+      }
+    }
+  }
 }
 
 export default controller;

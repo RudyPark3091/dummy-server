@@ -11,11 +11,17 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
 	const data = controller.findById(req.params.id);
 	res.send(data);
-})
+});
 
 router.post("/", (req, res) => {
 	const body = req.body;
 	controller.create(body);
+	res.send(body);
+});
+
+router.put("/:id", (req, res) => {
+	const body = req.body;
+	controller.update(body);
 	res.send(body);
 })
 
