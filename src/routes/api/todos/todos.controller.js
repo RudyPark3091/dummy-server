@@ -43,6 +43,12 @@ const controller = {
         item.due = body.due;
       }
     }
+  },
+  delete: id => {
+    const l = db.length;
+    db.filter(item => item.id !== id);
+    if (l > db.length) return true;
+    else return false;
   }
 }
 
