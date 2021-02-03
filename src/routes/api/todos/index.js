@@ -16,20 +16,22 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
 	const body = req.body;
 	controller.create(body);
-	res.status(200).send(body);
+	res.status(201).json({ message: "created" });
 });
 
 router.put("/:id", (req, res) => {
 	const body = req.body;
-	controller.update(body);
-	res.status(200).send(body);
+	if (controller.update(req.params.id, body))
+		res.status(200).json({ message: "updated" });
+	else
+		res.status(404).json({ message: `item with ${id} not found` });
 })
 
 router.delete("/:id", (req, res) => {
 	if (controller.delete(id))
-		res.status(200).send({ message: "deleted" });
+		res.status(200).json({ message: "deleted" });
 	else
-		res.status(404).send({ message: `item with ${id} not found`});
+		res.status(404).json({ message: `item with ${id} not found`});
 })
 
 export default router;

@@ -3,11 +3,13 @@ const db = [
     id: 0,
     content: "lorem ipsum",
     due: "2021-02-01",
+    done: false,
   },
   {
     id: 1,
     content: "dolor sit",
     due: "2021-02-01",
+    done: true,
   }
 ];
 
@@ -16,33 +18,43 @@ const controller = {
     return db;
   },
   findById: id => {
-    for (const item of db) {
-      if (item.id === +id) return item;
-    }
+    const filtered = db.filter(item => item.id === +id);
+    if (filtered.length !== 1) return {};
+    else return filtered[0];
   },
-  create: item => {
-    if (item.id)
-      throw new Error("you cannot specify id");
-    if (!item.content)
-      throw new Error("there must be a content");
-    if (!item.due)
-      throw new Error("there must be a due date");
-    item.id = db.length;
-    db.push(item);
-  },
-  update: body => {
+  create: body => {
     if (body.id)
       throw new Error("you cannot specify id");
     if (!body.content)
       throw new Error("there must be a content");
     if (!body.due)
       throw new Error("there must be a due date");
-    for (const item of db) {
+    if (!body.done || typeof body.done !== "boolean")
+      throw new Error("boolean field done cannot be a null");
+    const item = {
+      id: db.length,
+      ...body
+    };
+    db.push(item);
+  },
+  update: (id, body) => {
+    if (body.id)
+      throw new Error("you cannot specify id");
+    if (!body.content)
+      throw new Error("there must be a content");
+    if (!body.due)
+      throw new Error("there must be a due date");
+    if (!body.done || typeof body.done !== "boolean")
+      throw new Error("field done cannot be a null");
+    db.forEach(item => {
       if (item.id === +id) {
         item.content = body.content;
         item.due = body.due;
+        item.done = body.done;
+        return true;
       }
-    }
+    });
+    return false;
   },
   delete: id => {
     const l = db.length;
