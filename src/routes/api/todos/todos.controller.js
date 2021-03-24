@@ -29,7 +29,7 @@ const controller = {
       throw new Error("there must be a content");
     if (!body.due)
       throw new Error("there must be a due date");
-    if (!body.done || typeof body.done !== "boolean")
+    if (!body.hasOwnProperty("done") || typeof body.done !== "boolean")
       throw new Error("boolean field done cannot be a null");
     const item = {
       id: db.length,
@@ -44,7 +44,7 @@ const controller = {
       throw new Error("there must be a content");
     if (!body.due)
       throw new Error("there must be a due date");
-    if (!body.done || typeof body.done !== "boolean")
+    if (!body.hasOwnProperty("done") || typeof body.done !== "boolean")
       throw new Error("field done cannot be a null");
     db.forEach(item => {
       if (item.id === +id) {
