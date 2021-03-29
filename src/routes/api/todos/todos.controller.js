@@ -1,4 +1,4 @@
-const db = [
+let db = [
   {
     id: 0,
     content: "lorem ipsum",
@@ -19,7 +19,7 @@ const controller = {
   },
   findById: id => {
     const filtered = db.filter(item => item.id === +id);
-    if (filtered.length !== 1) return {};
+    if (filtered.length !== 1) return false;
     else return filtered[0];
   },
   create: body => {
@@ -40,25 +40,20 @@ const controller = {
   update: (id, body) => {
     if (body.id)
       throw new Error("you cannot specify id");
-    if (!body.content)
-      throw new Error("there must be a content");
-    if (!body.due)
-      throw new Error("there must be a due date");
-    if (!body.hasOwnProperty("done") || typeof body.done !== "boolean")
-      throw new Error("field done cannot be a null");
-    db.forEach(item => {
-      if (item.id === +id) {
-        item.content = body.content;
-        item.due = body.due;
-        item.done = body.done;
+    const changed = db.filter(item => {
+      if (item.id === id) {
+				if (body.content) item.content = body.content;
+				if (body.due) item.due = body.due;
+				if (body.hasOwnProperty("done")) item.done = body.done;
         return true;
       }
     });
-    return false;
+		if (changed.length > 0) return true;
+    else return false;
   },
   delete: id => {
     const l = db.length;
-    db.filter(item => item.id !== id);
+    db = db.filter(item => item.id !== id);
     if (l > db.length) return true;
     else return false;
   }

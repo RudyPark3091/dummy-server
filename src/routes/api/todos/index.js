@@ -10,7 +10,10 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
 	const data = controller.findById(req.params.id);
-	res.status(200).send(data);
+	if (!data)
+		res.status(404).send({ message: `item with ${req.params.id} not found` });
+	else
+		res.status(200).send(data);
 });
 
 router.post("/", (req, res) => {
@@ -21,17 +24,17 @@ router.post("/", (req, res) => {
 
 router.put("/:id", (req, res) => {
 	const body = req.body;
-	if (controller.update(req.params.id, body))
+	if (controller.update(+(req.params.id), body))
 		res.status(200).json({ message: "updated" });
 	else
-		res.status(404).json({ message: `item with ${id} not found` });
+		res.status(404).json({ message: `item with ${req.params.id} not found` });
 })
 
 router.delete("/:id", (req, res) => {
-	if (controller.delete(id))
+	if (controller.delete(+(req.params.id)))
 		res.status(200).json({ message: "deleted" });
 	else
-		res.status(404).json({ message: `item with ${id} not found`});
+		res.status(404).json({ message: `item with ${req.params.id} not found`});
 })
 
 export default router;
