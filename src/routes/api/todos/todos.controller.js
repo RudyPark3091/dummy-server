@@ -36,6 +36,7 @@ const controller = {
       ...body
     };
     db.push(item);
+		return item;
   },
   update: (id, body) => {
     if (body.id)
