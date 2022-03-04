@@ -31,8 +31,9 @@ const controller = {
       typeof body.done !== "boolean"
     )
       throw new Error("boolean field done cannot be a null");
+    const id = db[db.length - 1].id + 1;
     const item = {
-      id: db.length,
+      id,
       ...body,
     };
     db.push(item);
